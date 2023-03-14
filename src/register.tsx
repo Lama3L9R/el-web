@@ -1,21 +1,28 @@
 import { ThemeProvider } from '@emotion/react'
 import { Alert, Button, Collapse, CssBaseline, Grid, Link, Paper, Snackbar, TextField, Typography } from '@mui/material'
+import axios from 'axios'
 
 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { globalTheme } from './theme'
+import { globalAPIBaseURL, globalTheme } from './theme'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <LoginMenu />
+    <RegisterMenu />
   </React.StrictMode>,
 )
 
-function LoginMenu() {
+function RegisterMenu() {
   const [openContactAdmin, setOpenContactAdmin] = React.useState(false)
+  const [registerInProgress, setRegisterInProgress] = React.useState(false)
   const [loginError, setLoginError] = React.useState(false)
   const [loginErrorMessage, setLoginErrorMessage] = React.useState('')
+
+  const usernameRef = React.useRef<HTMLInputElement>(null)
+  const passwordRef = React.useRef<HTMLInputElement>(null)
+  const repeatePasswordRef = React.useRef<HTMLInputElement>(null)
+
 
   return <div>
     <ThemeProvider theme={globalTheme}>
@@ -50,22 +57,47 @@ function LoginMenu() {
                 </Grid>
 
                 <Grid item sx={{minWidth: '100%', paddingBottom: '0.5rem'}}>
-                  <TextField fullWidth label="Username" type="text" autoComplete="current-username" onFocus={() => setLoginError(false)}/>
+                  <TextField inputRef={usernameRef} fullWidth label="Username" type="text" autoComplete="current-username" onFocus={() => setLoginError(false)}/>
                 </Grid>
 
                 <Grid item sx={{minWidth: '100%', paddingBottom: '0.5rem'}} >
-                  <TextField fullWidth label="Password" type="password" autoComplete="current-password" onFocus={() => setLoginError(false)}/>
+                  <TextField inputRef={passwordRef} fullWidth label="Password" type="password" autoComplete="current-password" onFocus={() => setLoginError(false)}/>
                 </Grid>
 
                 <Grid item sx={{minWidth: '100%', paddingBottom: '0.5rem'}} >
-                  <TextField fullWidth label="Repeat Password" type="password" autoComplete="current-password" onFocus={() => setLoginError(false)}/>
+                  <TextField inputRef={repeatePasswordRef} fullWidth label="Repeat Password" type="password" autoComplete="current-password" onFocus={() => setLoginError(false)}/>
                 </Grid>
 
                 <Grid item sx={{minWidth: '100%', paddingBottom: '0.5rem'}} >
-                  <Button sx={{minWidth: '100%'}}  variant='contained' color='primary' onClick={() => {
-                    // todo login
-                    setLoginErrorMessage('Mismatched passwords')
-                    setLoginError(true)
+                  <Button sx={{minWidth: '100%'}} disabled={registerInProgress} variant='contained' color='primary' onClick={() => {
+                    if (passwordRef.current?.value != repeatePasswordRef.current?.value) {                 
+                      setLoginErrorMessage('Mismatched passwords')
+                      setLoginError(true)
+                      return
+                    }
+                    
+                    setRegisterInProgress(true)
+                    axios.request({
+                      url: `${globalAPIBaseURL}/session/register`,
+                      data: JSON.stringify({ 
+                        username: usernameRef.current?.value, 
+                        password: passwordRef.current?.value 
+                      }),
+                      headers: {
+                        "Content-Type": "application/json"
+                      },
+                      method: "POST",
+                    }).then(({ data }) => {
+                      setRegisterInProgress(false)
+
+                      if (data.status.err === 0) {
+                        window.location.href = "/"
+                      } else {
+                        setLoginErrorMessage('Failed to register: ' + data.status.msg + ` (Err ${data.status.err})`)
+                        setLoginError(true)
+                      }
+                    })
+
                   }}> Register </Button>
                 </Grid>
 
