@@ -13,3 +13,7 @@ front-end of Project EL
 2. `$ yarn install`
 3. `$ yarn build`
 4. Deploy `dist` folder with ingress / nginx or whatever you like
+
+## Configuring
+
+You can override the default api url by setting this env argument: `EL_API_PROD_ADDRESS`

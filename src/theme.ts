@@ -17,4 +17,10 @@ export const themeOptions: ThemeOptions = {
   
 export const globalTheme = createTheme(themeOptions)
 
-export const globalAPIBaseURL = "http://localhost:88"
+export const globalAPIBaseURL = (() => {
+  if (import.meta.env.PROD) {
+    return import.meta.env.EL_API_PROD_ADDRESS ?? "https://api." + window.location.hostname 
+  } else {
+    return "http://localhost:88"
+  }
+})()
