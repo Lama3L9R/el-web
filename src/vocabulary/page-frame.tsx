@@ -7,6 +7,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ClassIcon from '@mui/icons-material/Class';
 import ConstructionIcon from '@mui/icons-material/Construction';
+import SearchIcon from '@mui/icons-material/Search';
 
 
 export function PageFrame({onSideMenuClick}: { onSideMenuClick: () => void }, ) {
@@ -63,12 +64,12 @@ export function SideMenu({showSideMenu, onClose}: { showSideMenu: boolean, onClo
         </ListItem>
 
         <ListItem disablePadding>
-          <ListItemButton >
+          <ListItemButton href='/vocabulary/query/query.html'>
             <ListItemIcon>
-              <ConstructionIcon />
+              <SearchIcon />
             </ListItemIcon>
             
-            <ListItemText primary='Comming Soon'/>
+            <ListItemText primary='Word Search'/>
           </ListItemButton>
         </ListItem>
 
