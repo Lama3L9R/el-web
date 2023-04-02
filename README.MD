@@ -4,6 +4,8 @@
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 ![TeamCity build status](https://tc.lama.icu/app/rest/builds/buildType:id:ElWeb_Build/statusIcon.svg)
 
+## Deprecated! Moving ProjectEL to a part of EduTools
+
 front-end of Project EL
 
 ---
